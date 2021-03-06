@@ -35,7 +35,7 @@ const mailMessage = (url) => {
         `<p>Hi this is Raavan from gaming World,<br />
             you have a SECRET MESSAGE waiting for only you to open. <br />
             <a href='${url}' target='_blank'>${url}</a><br />
-            Don't Tell It Top Anyone...
+            Don't Tell It To Anyone...
          </p>`
     );
 }
@@ -59,11 +59,11 @@ app.post('/create-message', async (req, res) => {
         mailData.html = mailMessage(userMailUrl);
         await transporter.sendMail(mailData);
         res.status(200).json({message: "secret message is sent. Don't forget yout secret key and password", result});
+
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
     } finally {
-        console.log(client);
         client.close();
     }
 })
