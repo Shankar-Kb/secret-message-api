@@ -96,7 +96,7 @@ app.delete('/delete-message', async (req, res) => {
             }
         }else{
             client.close();
-            res.status(404).json({message: "secret key not found!!!"});
+            res.status(404).json({message: "Secret key not found!"});
         }
     } catch (error) {
         console.log(error);
