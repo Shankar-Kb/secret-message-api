@@ -30,11 +30,12 @@ const mailData = {
     subject: "S*CR*T M*SSAG*"
 }
 
-const mailMessage = (url) => {
+const mailMessage = (url, pass) => {
     return (
         `<p>Hi this is Raavan from gaming World,<br />
             you have a SECRET MESSAGE waiting for only you to open. <br />
             <a href='${url}' target='_blank'>${url}</a><br />
+            Here is your pass to view the message - ${pass}
             Don't Tell It To Anyone...
          </p>`
     );
@@ -50,13 +51,17 @@ app.post('/create-message', async (req, res) => {
         const data = {
             key: req.body.randomKey,
             password: hash,
-            message: req.body.message
+            message: req.body.message,
+            messagePass: req.body.messagePass,
+            //createdAt: new Date(),
+            //expiresIn: req.body.expiresIn
         }
         await db.collection('secretMessage').insertOne(data);
+        //db.collection('secretMessage').createIndex( { "createdAt": 1 }, { expireAfterSeconds: data.expiresIn } );
         const result = await db.collection('secretMessage').findOne({key: data.key});
         const userMailUrl = `${req.body.targetURL}/msg?result_id=${result._id}`;
         mailData.to = req.body.targetMail;
-        mailData.html = mailMessage(userMailUrl);
+        mailData.html = mailMessage(userMailUrl, messagePass);
         await transporter.sendMail(mailData);
         client.close();
         res.status(200).json({message: "secret message is sent. Don't forget yout secret key and password", result});
