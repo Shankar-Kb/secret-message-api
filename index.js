@@ -61,7 +61,7 @@ app.post('/create-message', async (req, res) => {
         const result = await db.collection('secretMessage').findOne({key: data.key});
         const userMailUrl = `${req.body.targetURL}/msg?result_id=${result._id}`;
         mailData.to = req.body.targetMail;
-        mailData.html = mailMessage(userMailUrl, messagePass);
+        mailData.html = mailMessage(userMailUrl, data.messagePass);
         await transporter.sendMail(mailData);
         client.close();
         res.status(200).json({message: "secret message is sent. Don't forget yout secret key and password", result});
